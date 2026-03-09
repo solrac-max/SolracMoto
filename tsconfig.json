@@ -21,3 +21,11 @@
     }
   }
 }
+{
+  "compilerOptions": {
+    "paths": {
+      "@shared/*": ["./shared/*"]
+    },
+    "baseUrl": "."
+  }
+}
