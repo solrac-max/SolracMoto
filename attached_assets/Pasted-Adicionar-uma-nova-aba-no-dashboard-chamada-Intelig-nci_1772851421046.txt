@@ -1,0 +1,241 @@
+Adicionar uma nova aba no dashboard chamada:
+
+"Inteligência Financeira da Frota"
+
+Essa aba deve funcionar como um painel de análise de investimento da frota de veículos.
+
+IMPORTANTE:
+Não recriar o sistema atual.
+Apenas adicionar essa nova aba utilizando os dados já existentes.
+
+--------------------------------------------
+
+DADOS JÁ EXISTENTES NO SISTEMA
+
+Cada veículo possui:
+
+placa
+marca
+modelo
+ano
+valor_compra
+data_compra
+receita_mensal
+
+--------------------------------------------
+
+1) BUSCAR VALOR NA TABELA FIPE
+
+Para cada veículo consultar automaticamente o valor atual da Tabela FIPE usando API pública.
+
+Exemplo de API:
+
+https://deividfortuna.github.io/fipe/
+
+Salvar:
+
+valor_fipe_atual
+data_consulta
+
+--------------------------------------------
+
+2) CALCULAR INVESTIMENTO TOTAL
+
+Somar todos os valores de compra das motos.
+
+INVESTIMENTO_TOTAL =
+soma(valor_compra)
+
+Exibir em card:
+
+Investimento total na frota
+
+--------------------------------------------
+
+3) CALCULAR VALOR ATUAL DA FROTA
+
+Somar todos os valores da FIPE.
+
+VALOR_FROTA_ATUAL =
+soma(valor_fipe_atual)
+
+Card:
+
+Valor atual da frota
+
+--------------------------------------------
+
+4) CALCULAR VALORIZAÇÃO OU DESVALORIZAÇÃO
+
+VALORIZACAO =
+valor_frota_atual - investimento_total
+
+Mostrar:
+
+valor em R$
+porcentagem
+
+Card:
+
+Valorização patrimonial da frota
+
+--------------------------------------------
+
+5) CALCULAR RECEITA TOTAL GERADA
+
+Somar todas receitas mensais das motos.
+
+RECEITA_MENSAL_TOTAL =
+soma(receita_mensal)
+
+Card:
+
+Receita mensal da frota
+
+--------------------------------------------
+
+6) CALCULAR RECEITA ACUMULADA
+
+Para cada moto:
+
+meses_ativa =
+meses entre data_compra e hoje
+
+receita_total_moto =
+meses_ativa * receita_mensal
+
+Somar tudo:
+
+RECEITA_TOTAL_FROTA
+
+Card:
+
+Receita total gerada pela frota
+
+--------------------------------------------
+
+7) CALCULAR LUCRO TOTAL DO NEGÓCIO
+
+LUCRO_TOTAL =
+
+receita_total_frota + valor_frota_atual - investimento_total
+
+Esse valor mostra quanto você realmente ganhou com a frota.
+
+Card:
+
+Lucro total do negócio
+
+--------------------------------------------
+
+8) CALCULAR ROI REAL DO NEGÓCIO
+
+ROI_REAL =
+
+(lucro_total / investimento_total) * 100
+
+Card:
+
+ROI real da frota
+
+--------------------------------------------
+
+9) CALCULAR PAYBACK
+
+PAYBACK =
+
+investimento_total / receita_mensal_total
+
+Mostrar tempo estimado de retorno.
+
+Card:
+
+Tempo estimado de retorno do investimento
+
+--------------------------------------------
+
+10) SIMULAÇÃO DE VENDA DA FROTA
+
+Criar card:
+
+"Se vender toda a frota hoje"
+
+Mostrar:
+
+valor total FIPE
+lucro total
+ROI final
+
+--------------------------------------------
+
+11) TABELA DETALHADA POR MOTO
+
+Mostrar:
+
+Placa
+Modelo
+Ano
+Valor compra
+Valor FIPE atual
+Valorização
+Receita mensal
+Receita acumulada
+ROI individual
+Tempo de retorno
+
+--------------------------------------------
+
+12) GRÁFICO DE CRESCIMENTO DO PATRIMÔNIO
+
+Usar Chart.js
+
+Mostrar evolução mensal de:
+
+patrimônio total
+
+patrimônio = valor_frota + lucro acumulado
+
+--------------------------------------------
+
+13) HISTÓRICO FIPE
+
+Criar tabela:
+
+historico_fipe
+
+Campos:
+
+placa
+valor_fipe
+data_registro
+
+Salvar valor todo mês automaticamente.
+
+--------------------------------------------
+
+14) BOTÃO
+
+Adicionar botão:
+
+"Atualizar valores FIPE"
+
+Esse botão deve:
+
+consultar API
+atualizar valores
+salvar histórico
+
+--------------------------------------------
+
+15) DESIGN
+
+Seguir o mesmo layout do dashboard existente.
+
+Utilizar:
+
+cards grandes
+gráficos
+tabela detalhada
+layout moderno
+
+estilo dashboard financeiro SaaS.
