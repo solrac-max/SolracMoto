@@ -1,15 +1,39 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Bike, Users, CreditCard, Wrench, Shield, TrendingUp, AlertTriangle } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Bike, Users, CreditCard, Wrench, Shield, TrendingUp, AlertTriangle, Mail, Loader2 } from "lucide-react";
 import solracLogo from "@assets/WhatsApp_Image_2026-02-13_at_01.09.05_1771165708652.jpeg";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function Landing() {
   const params = new URLSearchParams(window.location.search);
   const accessDenied = params.get("access") === "denied";
+  const { login, isLoggingIn, loginError } = useAuth();
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    if (!email.trim()) {
+      setError("Digite seu e-mail");
+      return;
+    }
+    try {
+      await login(email.trim());
+    } catch (err: any) {
+      if (err.message === "access_denied") {
+        setError("Acesso negado. Seu e-mail não está autorizado.");
+      } else {
+        setError("Erro ao fazer login. Tente novamente.");
+      }
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-background/80 border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 gap-4">
@@ -26,11 +50,8 @@ export default function Landing() {
               </a>
             </div>
             <div className="flex items-center gap-3">
-              <Button variant="outline" asChild data-testid="button-login">
-                <a href="/api/login">Entrar</a>
-              </Button>
-              <Button asChild data-testid="button-get-started">
-                <a href="/api/login">Começar Grátis</a>
+              <Button variant="outline" asChild data-testid="button-login-nav">
+                <a href="#login">Entrar</a>
               </Button>
             </div>
           </div>
@@ -48,7 +69,6 @@ export default function Landing() {
         </div>
       )}
 
-      {/* Hero Section */}
       <section className={`${accessDenied ? "pt-44" : "pt-32"} pb-20 px-4 sm:px-6 lg:px-8`}>
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -67,7 +87,7 @@ export default function Landing() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button size="lg" asChild data-testid="button-hero-start">
-                  <a href="/api/login">
+                  <a href="#login">
                     <TrendingUp className="w-5 h-5 mr-2" />
                     Começar Agora
                   </a>
@@ -128,8 +148,55 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section id="features" className="py-20 px-4 sm:px-6 lg:px-8 bg-muted/30">
+      <section id="login" className="py-20 px-4 sm:px-6 lg:px-8 bg-muted/30">
+        <div className="max-w-md mx-auto">
+          <Card className="p-8">
+            <div className="flex flex-col items-center mb-6">
+              <img src={solracLogo} alt="Solrac Moto" className="w-16 h-16 rounded-xl object-cover mb-4" />
+              <h2 className="text-2xl font-bold">Entrar no Sistema</h2>
+              <p className="text-sm text-muted-foreground mt-1">
+                Use seu e-mail autorizado para acessar
+              </p>
+            </div>
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="login-email">E-mail</Label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    id="login-email"
+                    type="email"
+                    placeholder="seu@email.com"
+                    value={email}
+                    onChange={(e) => { setEmail(e.target.value); setError(""); }}
+                    className="pl-10"
+                    disabled={isLoggingIn}
+                    data-testid="input-login-email"
+                  />
+                </div>
+              </div>
+              {error && (
+                <div className="flex items-center gap-2 text-sm text-destructive">
+                  <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+                  <p data-testid="text-login-error">{error}</p>
+                </div>
+              )}
+              <Button type="submit" className="w-full" disabled={isLoggingIn} data-testid="button-login-submit">
+                {isLoggingIn ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Entrando...
+                  </>
+                ) : (
+                  "Entrar"
+                )}
+              </Button>
+            </form>
+          </Card>
+        </div>
+      </section>
+
+      <section id="features" className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
@@ -198,8 +265,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Benefits Section */}
-      <section id="benefits" className="py-20 px-4 sm:px-6 lg:px-8">
+      <section id="benefits" className="py-20 px-4 sm:px-6 lg:px-8 bg-muted/30">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
@@ -268,7 +334,6 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-primary text-primary-foreground">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl sm:text-4xl font-bold mb-6">
@@ -278,14 +343,13 @@ export default function Landing() {
             Comece agora gratuitamente e descubra como a Solrac Moto pode transformar a gestão do seu negócio.
           </p>
           <Button size="lg" variant="secondary" asChild data-testid="button-cta-start">
-            <a href="/api/login">
+            <a href="#login">
               Começar Gratuitamente
             </a>
           </Button>
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="py-8 px-4 sm:px-6 lg:px-8 border-t">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
